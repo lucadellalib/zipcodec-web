@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> ZipCodec: Towards Ultra-Low-Frame-Rate Streaming Speech Coding </title>
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+        <style>
+        body {
+    		font-family: 'Montserrat'; margin-left:201px; margin-right:151px
+	     }
+        code {
+            display: block;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            width: 850px;
+        }
+
+        table {
+            border-spacing: 0 10px;
+            margin-bottom: 20px;
+        }
+
+        td.label {
+            width: 300px;
+            font-weight: 600;
+            color: brown;
+            vertical-align: middle;
+            padding-right: 20px;
+        }
+
+        td.audio-cell {
+            vertical-align: middle;
+        }
+
+        audio {
+            width: 320px;
+        }
+
+        h4 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+	</style>
+
+    </head>
+    <body>
+	    <div class="container my_text" align="center">
+	        <h1 style="color:brown;"> ZipCodec: Towards Ultra-Low-Frame-Rate Streaming Speech Coding </h1>
+	        <p style="color:darkblue;">Project Webpage<br /> 
+[<img style="transform: translate(0px,7px);" src="gh-logo.png" height="25"/> <a href="https://github.com/lucadellalib/zipcodec" target="blank_">code</a>]
+       </p>
+	    </div>
+
+		<h2 style="color:brown;" id='code' align="center"> Abstract </h2>
+    Neural audio codecs are a fundamental component of modern speech generation systems. While recent codecs achieve increasingly low bitrates, reducing frame rate remains challenging, as each token must preserve more information while maintaining reconstruction quality and streamability. We present ZipCodec, a streaming neural speech codec operating at just 6.25 Hz and 0.80 kbps with a theoretical latency of 160 ms. Our approach combines large-scale WavLM distillation with a redesigned transformer-based architecture, scalar spherical quantization, and a latency-aware streaming decoder. Experiments show that ZipCodec substantially outperforms existing streaming codecs at comparable bitrates in both reconstruction and downstream tasks, while operating at a significantly lower frame rate. Despite its 842M parameters, ZipCodec achieves real-time single-stream inference on a consumer-grade CPU.
+<br><br>
+
+                Please note:
+
+                <ul>
+                     <li> Chrome is the preferred browser. The samples may not always run in Firefox. </li> <br>
+                     <li> Use of headphones/earphones recommended. </li> <br>
+                     <li> <b> Please tune your volume appropriately before playing any sample. </b> </li> <br>
+                     <li> <mark> The audio files may take some time to load. </mark> If they do not load even after waiting, it can be a temporary hosting server issue. In that case, please visit again after sometime.</li> 
+                     <br>
+                </ul>
+
+
+            <h2 style="color:brown;" id='sr'> Speech Resynthesis</h2>
+
+
+<h4 style="color:darkblue;"> Sample A </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/7176-92135-0009_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/7176-92135-0009_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/7176-92135-0009_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/7176-92135-0009_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/7176-92135-0009_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/7176-92135-0009_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/7176-92135-0009_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/7176-92135-0009_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/7176-92135-0009_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+<h4 style="color:darkblue;"> Sample B </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/2300-131720-0000_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/2300-131720-0000_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/2300-131720-0000_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/2300-131720-0000_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/2300-131720-0000_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/2300-131720-0000_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/2300-131720-0000_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/2300-131720-0000_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/2300-131720-0000_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+<h4 style="color:darkblue;"> Sample C </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/5142-36377-0002_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/5142-36377-0002_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/5142-36377-0002_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/5142-36377-0002_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/5142-36377-0002_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/5142-36377-0002_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/5142-36377-0002_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/5142-36377-0002_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/5142-36377-0002_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+<h4 style="color:darkblue;"> Sample D </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/237-126133-0006_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/237-126133-0006_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/237-126133-0006_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/237-126133-0006_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/237-126133-0006_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/237-126133-0006_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/237-126133-0006_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/237-126133-0006_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/237-126133-0006_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+<h4 style="color:darkblue;"> Sample E </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/3575-170457-0001_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/3575-170457-0001_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/3575-170457-0001_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/3575-170457-0001_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/3575-170457-0001_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/3575-170457-0001_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/3575-170457-0001_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/3575-170457-0001_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/3575-170457-0001_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+<h4 style="color:darkblue;"> Sample F </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/908-157963-0013_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/908-157963-0013_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/908-157963-0013_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/908-157963-0013_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/908-157963-0013_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/908-157963-0013_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/908-157963-0013_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/908-157963-0013_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/908-157963-0013_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+
+<h4 style="color:darkblue;"> Sample G </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/2961-961-0001_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/2961-961-0001_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/2961-961-0001_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/2961-961-0001_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/2961-961-0001_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/2961-961-0001_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/2961-961-0001_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/2961-961-0001_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/2961-961-0001_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+
+<h4 style="color:darkblue;"> Sample H </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/8555-292519-0007_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/8555-292519-0007_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/8555-292519-0007_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/8555-292519-0007_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/8555-292519-0007_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/8555-292519-0007_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/8555-292519-0007_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/8555-292519-0007_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/8555-292519-0007_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+
+<h4 style="color:darkblue;"> Sample I </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/8455-210777-0059_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/8455-210777-0059_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/8455-210777-0059_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/8455-210777-0059_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/8455-210777-0059_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/8455-210777-0059_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/8455-210777-0059_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/8455-210777-0059_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/8455-210777-0059_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+
+<h4 style="color:darkblue;"> Sample J </h4>
+<table>
+<tr><td class="label"> Reference &emsp; &emsp; &emsp; </td> <td class="audio-cell"><audio controls> <source src= "sr/reference/5105-28240-0017_reference.wav" type="audio/wav"> </audio> </td></tr>
+
+<tr><td class="label"> EnCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/encodec/5105-28240-0017_encodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> AudioDec (1.60 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/audiodec/5105-28240-0017_audiodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> HILCodec (1.50 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/hilcodec/5105-28240-0017_hilcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> Mimi (0.83 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/mimi6/5105-28240-0017_mimi6.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> PAST (1.00 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/past/5105-28240-0017_past.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec-stream_65k/5105-28240-0017_focalcodec-stream_65k.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> ZipCodec (0.80 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/zipcodec/5105-28240-0017_zipcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+<tr><td class="label"> FocalCodec (0.65 kbps) &emsp; &emsp; </td> <td class="audio-cell"><audio controls>  <source src= "sr/focalcodec/5105-28240-0017_focalcodec.wav" type="audio/wav">   </audio> </td> </tr>
+
+</table>
+<br> <br> <br>
+
+
+            <h2 style="color:brown;" id='sr'> Voice Conversion</h2>
+<table>
+    <tr><td style="color:brown;"> Input &emsp; &emsp; &emsp; </td> <td> <audio controls> <source src= "vc/input.wav" type="audio/wav"> </audio> </td></tr>
+    <tr><td style="color:brown;"> Reference &emsp; &emsp; &emsp; </td> <td> <audio controls> <source src= "vc/reference.wav" type="audio/wav"> </audio> </td></tr>
+    <tr><td style="color:brown;"> FocalCodec-Stream (0.80 kbps) &emsp; &emsp; &emsp; </td> <td> <audio controls> <source src= "vc/focalcodec-stream_65k.wav" type="audio/wav"> </audio> </td></tr>
+    <tr><td style="color:brown;"> ZipCodec (0.80 kbps) &emsp; &emsp; &emsp; </td> <td> <audio controls> <source src= "vc/zipcodec.wav" type="audio/wav"> </audio> </td></tr>
+    <tr><td style="color:brown;"> FocalCodec (0.65 kbps) &emsp; &emsp; &emsp; </td> <td> <audio controls> <source src= "vc/focalcodec.wav" type="audio/wav"> </audio> </td></tr>
+</table>
+
+
+<br> <br> <br>
+
+     
+    </body>
+</html>
